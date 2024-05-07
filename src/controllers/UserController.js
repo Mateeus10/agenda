@@ -2,10 +2,10 @@ import User from '../models/UserModel.js';
 
 class UserController {
   async store(req, res) {
-    const { nome, sobrenome, email, idade } = req.body;
+    const { nome, email, password } = req.body;
 
 
-    if (!nome || !sobrenome || !email || !idade) {
+    if (!nome || !email || !password) {
       return res.status(400).json({ message: 'Por favor, forneça todos os campos obrigatórios: nome, sobrenome, email e idade.' });
     }
 
@@ -16,7 +16,7 @@ class UserController {
         return res.status(400).json({ message: 'E-mail já registrado. Por favor, escolha outro.' });
       }
 
-      const newUser = new User({ nome, sobrenome, email, idade });
+      const newUser = new User({ nome, email, password });
       await newUser.save();
 
       return res.status(200).json(newUser);

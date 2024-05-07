@@ -2,31 +2,36 @@
 var _mongoose = require('mongoose'); var _mongoose2 = _interopRequireDefault(_mongoose);
 var _validator = require('validator'); var _validator2 = _interopRequireDefault(_validator);
 
-const CounterSchema = new _mongoose2.default.Schema({
+// Definição do modelo CounterAl
+const CounterAlSchema = new _mongoose2.default.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
 });
 
-const Counter = _mongoose2.default.model('Counter', CounterSchema);
+const CounterAl = _mongoose2.default.model('CounterAl', CounterAlSchema);
 
-// Função para criar o contador apenas se ele ainda não existir
-const createCounterIfNeeded = async function () {
+// Função para criar o contador de alunos apenas se ele ainda não existir
+const createAlunoCounterIfNeeded = async function () {
   try {
-    const existingCounter = await Counter.findOne({ _id: 'userId' });
+    const existingCounter = await CounterAl.findOne({ _id: 'alunoId' });
     if (!existingCounter) {
-      await Counter.create({ _id: 'userId' });
+      await CounterAl.create({ _id: 'alunoId' });
     }
   } catch (error) {
-    console.error('Erro ao criar o contador:', error);
+    console.error('Erro ao criar o contador de alunos:', error);
   }
 }
 
-const UserSchema = new _mongoose2.default.Schema({
+const AlunoSchema = new _mongoose2.default.Schema({
   _id: {
     type: Number,
     default: 0 // Definimos o valor padrão como 0
   },
   nome: {
+    type: String,
+    required: true
+  },
+  sobrenome: {
     type: String,
     required: true
   },
@@ -49,11 +54,11 @@ const UserSchema = new _mongoose2.default.Schema({
   },
 });
 
-UserSchema.pre('save', async function (next) {
+AlunoSchema.pre('save', async function (next) {
   try {
     if (this.isNew) {
-      const counter = await Counter.findOneAndUpdate({ _id: 'userId' }, { $inc: { seq: 1 } }, { new: true, upsert: true });
-      this._id = counter.seq;
+      const contador = await CounterAl.findOneAndUpdate({ _id: 'alunoId' }, { $inc: { seq: 1 } }, { new: true, upsert: true });
+      this._id = contador.seq;
     }
     next();
   } catch (error) {
@@ -61,13 +66,13 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
-UserSchema.pre('save', async function () {
+AlunoSchema.pre('save', async function () {
   const salt = await _bcryptjs2.default.genSalt(10);
   this.password = await _bcryptjs2.default.hash(this.password, salt);
 });
 
-const User = _mongoose2.default.model('User', UserSchema);
-exports. default = User;
+const Aluno = _mongoose2.default.model('Aluno', AlunoSchema);
+exports. default = Aluno;
 
-// Verifica se o contador existe e, se não existir, cria um novo
-createCounterIfNeeded();
+// Verifica se o contador de alunos existe e, se não existir, cria um novo
+createAlunoCounterIfNeeded();
