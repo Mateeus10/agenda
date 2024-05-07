@@ -6,6 +6,7 @@ var _mongoose = require('mongoose'); var _mongoose2 = _interopRequireDefault(_mo
 var _dotenv = require('dotenv'); var _dotenv2 = _interopRequireDefault(_dotenv);
 
 var _routeAlunojs = require('./routes/routeAluno.js'); var _routeAlunojs2 = _interopRequireDefault(_routeAlunojs);
+var _routeHomejs = require('./routes/routeHome.js'); var _routeHomejs2 = _interopRequireDefault(_routeHomejs);
 var _routeUserjs = require('./routes/routeUser.js'); var _routeUserjs2 = _interopRequireDefault(_routeUserjs);
 
 _dotenv2.default.config();
@@ -22,6 +23,7 @@ _mongoose2.default.connect(process.env.DB_URL, {
 
 app.use(_express2.default.json());
 
+app.use('/', _routeHomejs2.default);
 app.use('/users/', _routeUserjs2.default);
 app.use('/alunos/', _routeAlunojs2.default);
 

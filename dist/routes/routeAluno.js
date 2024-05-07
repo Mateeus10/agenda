@@ -4,9 +4,9 @@ const route = _express.Router.call(void 0, );
 
 var _AlunoController = require('../controllers/AlunoController'); var _AlunoController2 = _interopRequireDefault(_AlunoController);
 
-//route.get('/', AlunoController.index);
+route.get('/', _AlunoController2.default.index);
 route.post('/', _AlunoController2.default.store);
-// route.put('/:id', AlunoController.update);
-// route.delete('/:id', AlunoController.delete);
+route.put('/:id', _AlunoController2.default.update);
+route.delete('/:id', _AlunoController2.default.delete);
 
 exports. default = route;
