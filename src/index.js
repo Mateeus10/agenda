@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 import alunoRoute from './routes/routeAluno.js';
+import homeRoute from './routes/routeHome.js';
 import userRoute from './routes/routeUser.js';
 
 dotenv.config();
@@ -22,6 +23,7 @@ mongoose.connect(process.env.DB_URL, {
 
 app.use(express.json());
 
+app.use('/', homeRoute);
 app.use('/users/', userRoute);
 app.use('/alunos/', alunoRoute);
 
