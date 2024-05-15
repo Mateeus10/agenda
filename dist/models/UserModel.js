@@ -9,12 +9,12 @@ const CounterSchema = new _mongoose2.default.Schema({
 
 const Counter = _mongoose2.default.model('Counter', CounterSchema);
 
-// Função para criar o contador apenas se ele ainda não existir
 const createCounterIfNeeded = async function () {
   try {
     const existingCounter = await Counter.findOne({ _id: 'userId' });
     if (!existingCounter) {
       await Counter.create({ _id: 'userId' });
+      console.log('Contador criado com sucesso.');
     }
   } catch (error) {
     console.error('Erro ao criar o contador:', error);
@@ -24,7 +24,7 @@ const createCounterIfNeeded = async function () {
 const UserSchema = new _mongoose2.default.Schema({
   _id: {
     type: Number,
-    default: 0 // Definimos o valor padrão como 0
+    default: 0
   },
   nome: {
     type: String,
@@ -52,22 +52,31 @@ const UserSchema = new _mongoose2.default.Schema({
 UserSchema.pre('save', async function (next) {
   try {
     if (this.isNew) {
-      const counter = await Counter.findOneAndUpdate({ _id: 'userId' }, { $inc: { seq: 1 } }, { new: true, upsert: true });
+      // Incrementar o contador de ID
+      const counter = await Counter.findOneAndUpdate(
+        { _id: 'userId' },
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true }
+      );
       this._id = counter.seq;
     }
+
+    // Gerar hash da senha
+    if (this.isModified('password')) {
+      const salt = await _bcryptjs2.default.genSalt(10);
+      this.password = await _bcryptjs2.default.hash(this.password, salt);
+    }
+
     next();
   } catch (error) {
     next(error);
   }
 });
 
-UserSchema.pre('save', async function () {
-  const salt = await _bcryptjs2.default.genSalt(10);
-  this.password = await _bcryptjs2.default.hash(this.password, salt);
-});
-
+// Criar o modelo de Usuário
 const User = _mongoose2.default.model('User', UserSchema);
-exports. default = User;
 
-// Verifica se o contador existe e, se não existir, cria um novo
+// Inicializar o contador quando o módulo é carregado
 createCounterIfNeeded();
+
+exports. default = User;
