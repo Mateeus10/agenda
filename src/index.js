@@ -1,4 +1,5 @@
 //import cors from 'cors';
+import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 
@@ -21,7 +22,13 @@ mongoose.connect(process.env.DB_URL, {
 
 }, console.log('OK'))
 
+const corsOptions = {
+  origin: 'http://localhost:300',
+  credential: true,
+  optionSucessStatus: 200
+}
 
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extends: true }))
 

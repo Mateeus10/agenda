@@ -1,4 +1,5 @@
 "use strict"; function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }//import cors from 'cors';
+var _cors = require('cors'); var _cors2 = _interopRequireDefault(_cors);
 var _express = require('express'); var _express2 = _interopRequireDefault(_express);
 var _mongoose = require('mongoose'); var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -21,7 +22,13 @@ _mongoose2.default.connect(process.env.DB_URL, {
 
 }, console.log('OK'))
 
+const corsOptions = {
+  origin: 'http://localhost:300',
+  credential: true,
+  optionSucessStatus: 200
+}
 
+app.use(_cors2.default.call(void 0, corsOptions));
 app.use(_express2.default.json());
 app.use(_express2.default.urlencoded({ extends: true }))
 
