@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB_URL, {
 }, console.log('OK'))
 
 const corsOptions = {
-  origin: 'http://localhost:300',
+  origin: 'http://localhost:3000',
   credential: true,
   optionSucessStatus: 200
 }
@@ -42,7 +42,7 @@ app.use('/tokens/', tokenRoute);
 
 
 
-app.listen(3008, () => {
-  console.log('Acessar http://localhost:3008');
+app.listen(3000, () => {
+  console.log('Acessar http://localhost:3000');
   console.log('Conectado com sucesso');
 });
