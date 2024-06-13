@@ -23,14 +23,14 @@ _mongoose2.default.connect(process.env.DB_URL, {
 }, console.log('OK'))
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3005',
   credential: true,
   optionSucessStatus: 200
 }
 
 app.use(_cors2.default.call(void 0, corsOptions));
 app.use(_express2.default.json());
-app.use(_express2.default.urlencoded({ extends: true }))
+app.use(_express2.default.urlencoded({ extended: true }));
 
 app.use('/', _routeHomejs2.default);
 app.use('/users/', _routeUserjs2.default);
@@ -42,7 +42,7 @@ app.use('/tokens/', _routeTokenjs2.default);
 
 
 
-app.listen(3000, () => {
-  console.log('Acessar http://localhost:3000');
+app.listen(3005, () => {
+  console.log('Acessar http://localhost:3005');
   console.log('Conectado com sucesso');
 });

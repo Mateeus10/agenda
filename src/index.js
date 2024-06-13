@@ -23,14 +23,14 @@ mongoose.connect(process.env.DB_URL, {
 }, console.log('OK'))
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3005',
   credential: true,
   optionSucessStatus: 200
 }
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extends: true }))
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/', homeRoute);
 app.use('/users/', userRoute);
@@ -42,7 +42,7 @@ app.use('/tokens/', tokenRoute);
 
 
 
-app.listen(3000, () => {
-  console.log('Acessar http://localhost:3000');
+app.listen(3005, () => {
+  console.log('Acessar http://localhost:3005');
   console.log('Conectado com sucesso');
 });

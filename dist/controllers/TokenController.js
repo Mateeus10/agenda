@@ -10,7 +10,7 @@ class TokenController {
     try {
       // Obter email e senha do corpo da requisição
       const { email = '', password = '' } = req.body;
-      console.log(email, password)
+
 
 
       // Verificar se o email e a senha foram fornecidos
