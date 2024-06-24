@@ -71,6 +71,19 @@ class AlunoController {
       return res.status(500).json({ message: 'Erro ao excluir usuário.' });
     }
   }
+  async show(req, res) {
+    try {
+      const aluno = await Aluno.findById(req.params.id);
+
+      const { id, nome, email } = aluno;
+
+      return res.json({ id, nome, email });
+    } catch (error) {
+      return res.json(null);
+
+    }
+  }
+
 
 }
 
