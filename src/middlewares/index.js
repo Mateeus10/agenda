@@ -14,10 +14,10 @@ export default async (req, res, next) => {
 
   try {
     const dados = jwt.verify(token, process.env.TOKEN_SECRET);
-    const { id, email } = dados;
+    const { _id, email } = dados;
 
     const user = await User.findOne({
-      id,
+      _id,
       email,
     });
 
@@ -27,7 +27,7 @@ export default async (req, res, next) => {
       });
     }
 
-    req.userId = id;
+    req.userId = _id;
     req.userEmail = email;
 
     return next();
