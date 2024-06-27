@@ -38,10 +38,6 @@ app.use('/alunos/', alunoRoute);
 app.use('/tokens/', tokenRoute);
 
 
-
-
-
-
 app.listen(3005, () => {
   console.log('Acessar http://localhost:3005');
   console.log('Conectado com sucesso');
