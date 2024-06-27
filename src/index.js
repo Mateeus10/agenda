@@ -1,6 +1,7 @@
-//import cors from 'cors';
+
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 
 
@@ -11,10 +12,7 @@ import homeRoute from './routes/routeHome.js';
 import tokenRoute from './routes/routeToken.js';
 import userRoute from './routes/routeUser.js';
 
-dotenv.config();
-
-const app = express();
-
+dotenv.config()
 
 mongoose.connect(process.env.DB_URL, {
   useUnifiedTopology: true,
@@ -22,13 +20,24 @@ mongoose.connect(process.env.DB_URL, {
 
 }, console.log('OK'))
 
+const whiteList = [
+  'https://agenda-rafo.onrender.com'
+]
+
 const corsOptions = {
-  origin: 'http://localhost:3005',
-  credential: true,
-  optionSucessStatus: 200
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by Cors'));
+    }
+  }
 }
 
+const app = express();
+
 app.use(cors(corsOptions));
+app.use(helmet())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
