@@ -13,9 +13,7 @@ _mongoose2.default.connect(process.env.DB_URL, {
 
 }, console.log('OK'))
 
+const port = process.env.APP_PORT;
 
-_app2.default.listen(3005, () => {
-  console.log('Acessar http://localhost:3005');
-  console.log('Conectado com sucesso');
-});
+_app2.default.listen(port);
 

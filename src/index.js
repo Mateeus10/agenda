@@ -13,9 +13,7 @@ mongoose.connect(process.env.DB_URL, {
 
 }, console.log('OK'))
 
+const port = process.env.APP_PORT;
 
-app.listen(3005, () => {
-  console.log('Acessar http://localhost:3005');
-  console.log('Conectado com sucesso');
-});
+app.listen(port);
 
