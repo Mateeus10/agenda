@@ -1,4 +1,4 @@
-import bodyParser from 'body-parser';
+
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -11,12 +11,21 @@ import userRoute from './routes/routeUser.js';
 
 
 
+const whiteList = [
+  'http://localhost:3005',
+  'https://agenda-1.onrender.com'
+];
 
 const corsOptions = {
-  origin: 'http://localhost:3005',
-  credentials: true,
-  optionSuccessStatus: 200
-}
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
 
 class App {
   constructor() {
@@ -28,8 +37,8 @@ class App {
   middlewares() {
     this.app.use(cors(corsOptions));
     this.app.use(helmet())
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
 
   }
 

@@ -1,4 +1,4 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _bodyparser = require('body-parser'); var _bodyparser2 = _interopRequireDefault(_bodyparser);
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 var _cors = require('cors'); var _cors2 = _interopRequireDefault(_cors);
 var _express = require('express'); var _express2 = _interopRequireDefault(_express);
 var _helmet = require('helmet'); var _helmet2 = _interopRequireDefault(_helmet);
@@ -11,12 +11,21 @@ var _routeUserjs = require('./routes/routeUser.js'); var _routeUserjs2 = _intero
 
 
 
+const whiteList = [
+  'http://localhost:3005',
+  'https://agenda-1.onrender.com'
+];
 
 const corsOptions = {
-  origin: 'http://localhost:3005',
-  credentials: true,
-  optionSuccessStatus: 200
-}
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
 
 class App {
   constructor() {
@@ -28,8 +37,8 @@ class App {
   middlewares() {
     this.app.use(_cors2.default.call(void 0, corsOptions));
     this.app.use(_helmet2.default.call(void 0, ))
-    this.app.use(_bodyparser2.default.json());
-    this.app.use(_bodyparser2.default.urlencoded({ extended: true }));
+    this.app.use(_express2.default.json());
+    this.app.use(_express2.default.urlencoded({ extended: true }));
 
   }
 
