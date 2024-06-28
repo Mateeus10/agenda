@@ -12,7 +12,7 @@ import userRoute from './routes/routeUser.js';
 const whiteList = [
   'http://localhost:3005'
 
-]
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -44,6 +44,8 @@ class App {
     this.app.use('/users/', userRoute);
     this.app.use('/alunos/', alunoRoute);
     this.app.use('/tokens/', tokenRoute);
+
+    this.app.options('*', cors(corsOptions));
 
 
   }

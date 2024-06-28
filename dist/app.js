@@ -12,7 +12,7 @@ var _routeUserjs = require('./routes/routeUser.js'); var _routeUserjs2 = _intero
 const whiteList = [
   'http://localhost:3005'
 
-]
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -44,6 +44,8 @@ class App {
     this.app.use('/users/', _routeUserjs2.default);
     this.app.use('/alunos/', _routeAlunojs2.default);
     this.app.use('/tokens/', _routeTokenjs2.default);
+
+    this.app.options('*', _cors2.default.call(void 0, corsOptions));
 
 
   }
