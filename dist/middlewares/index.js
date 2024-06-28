@@ -14,10 +14,10 @@ exports. default = async (req, res, next) => {
 
   try {
     const dados = _jsonwebtoken2.default.verify(token, process.env.TOKEN_SECRET);
-    const { _id, email } = dados;
+    const { id, email } = dados;
 
     const user = await _UserModeljs2.default.findOne({
-      _id,
+      id,
       email,
     });
 
@@ -27,7 +27,7 @@ exports. default = async (req, res, next) => {
       });
     }
 
-    req.userId = _id;
+    req.userId = id;
     req.userEmail = email;
 
     return next();

@@ -76,9 +76,9 @@ class UserController {
     try {
       const user = await _UserModeljs2.default.findById(req.params.id);
 
-      const { id, nome, email } = user;
+      const { _id, nome, email } = user;
 
-      return res.json({ id, nome, email });
+      return res.json({ _id, nome, email });
     } catch (error) {
       return res.json(null);
 
