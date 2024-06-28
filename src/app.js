@@ -11,20 +11,21 @@ import userRoute from './routes/routeUser.js';
 
 
 
-const whiteList = [
-  'http://localhost:3005',
-  'https://agenda-1.onrender.com'
-];
+// const whiteList = [
+//   'http://localhost:3005',
+//   'https://agenda-1.onrender.com'
+// ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whiteList.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//       console.log(Error)
+//     }
+//   }
+// };
 
 
 class App {
@@ -35,7 +36,13 @@ class App {
 
   }
   middlewares() {
-    this.app.use(cors(corsOptions));
+    this.app.use(cors(
+      {
+        origin: 'http://localhost:3000', // Permitir apenas solicitações do localhost:3000
+        methods: ['GET', 'POST'], // Métodos HTTP permitidos
+        allowedHeaders: ['Content-Type', 'Authorization'],
+      })
+    );
     this.app.use(helmet())
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
