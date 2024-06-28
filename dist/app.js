@@ -16,16 +16,12 @@ var _routeUserjs = require('./routes/routeUser.js'); var _routeUserjs2 = _intero
 //   'https://agenda-1.onrender.com'
 // ];
 
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whiteList.indexOf(origin) !== -1 || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//       console.log(Error)
-//     }
-//   }
-// };
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://agenda-rafo.onrender.com'],
+  methods: ['GET', 'POST'], // Métodos permitidos (opcional)
+  allowedHeaders: ['Content-Type'], // 
+
+};
 
 
 class App {
@@ -36,13 +32,7 @@ class App {
 
   }
   middlewares() {
-    this.app.use(_cors2.default.call(void 0, 
-      {
-        origin: 'http://localhost:3005', // Permitir apenas solicitações do localhost:3000
-        methods: ['GET', 'POST'], // Métodos HTTP permitidos
-        allowedHeaders: ['Content-Type', 'Authorization'],
-      })
-    );
+    this.app.use(_cors2.default.call(void 0, corsOptions))
     this.app.use(_helmet2.default.call(void 0, ))
     this.app.use(_express2.default.json());
     this.app.use(_express2.default.urlencoded({ extended: true }));
