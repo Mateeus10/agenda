@@ -38,7 +38,7 @@ class App {
   middlewares() {
     this.app.use(_cors2.default.call(void 0, 
       {
-        origin: 'http://localhost:3000', // Permitir apenas solicitações do localhost:3000
+        origin: 'http://localhost:3005', // Permitir apenas solicitações do localhost:3000
         methods: ['GET', 'POST'], // Métodos HTTP permitidos
         allowedHeaders: ['Content-Type', 'Authorization'],
       })
