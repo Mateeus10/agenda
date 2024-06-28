@@ -13,10 +13,10 @@ import userRoute from './routes/routeUser.js';
 
 
 const corsOptions = {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
-};
+  origin: 'http://localhost:3005',
+  credentials: true,
+  optionSuccessStatus: 200
+}
 
 class App {
   constructor() {
@@ -38,10 +38,6 @@ class App {
     this.app.use('/users/', userRoute);
     this.app.use('/alunos/', alunoRoute);
     this.app.use('/tokens/', tokenRoute);
-
-    this.app.options('*', cors(corsOptions));
-
-
   }
 }
 
