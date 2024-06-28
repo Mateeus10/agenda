@@ -10,7 +10,6 @@ import userRoute from './routes/routeUser.js';
 
 
 const whiteList = [
-  'https://agenda-rafo.onrender.com',
   'http://localhost:3005'
 
 ]

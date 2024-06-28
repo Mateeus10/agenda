@@ -10,7 +10,6 @@ var _routeUserjs = require('./routes/routeUser.js'); var _routeUserjs2 = _intero
 
 
 const whiteList = [
-  'https://agenda-rafo.onrender.com',
   'http://localhost:3005'
 
 ]
