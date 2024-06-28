@@ -10,20 +10,13 @@ import tokenRoute from './routes/routeToken.js';
 import userRoute from './routes/routeUser.js';
 
 
-const whiteList = [
-  'http://localhost:3005'
 
-];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by Cors'));
-    }
-  }
-}
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+};
 
 class App {
   constructor() {
