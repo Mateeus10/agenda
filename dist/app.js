@@ -19,7 +19,7 @@ var _routeUserjs = require('./routes/routeUser.js'); var _routeUserjs2 = _intero
 const corsOptions = {
   origin: ['http://localhost:3000', 'https://agenda-rafo.onrender.com'],
   methods: ['GET', 'POST'], // Métodos permitidos (opcional)
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 
 };
