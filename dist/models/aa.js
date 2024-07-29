@@ -61,7 +61,7 @@ UserSchema.methods.passwordIsValid = async function (password) {
 UserSchema.pre('save', async function (next) {
   try {
     if (this.isNew) {
-      const contador = await CounterUs.findOneAndUpdate({ _id: 'UserId' },
+      const contador = await CounterAl.findOneAndUpdate({ _id: 'UserId' },
         { $inc: { seq: 1 } },
         { new: true, upsert: true });
       this._id = contador.seq;

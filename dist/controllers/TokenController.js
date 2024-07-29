@@ -2,13 +2,11 @@
 var _jsonwebtoken = require('jsonwebtoken'); var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 var _UserModeljs = require('../models/UserModel.js'); var _UserModeljs2 = _interopRequireDefault(_UserModeljs);
 
-_dotenv2.default.config(); // Carregar variáveis de ambiente do arquivo .env
+_dotenv2.default.config();
 
 class TokenController {
   async store(req, res) {
     const { email = '', password = '' } = req.body;
-
-
 
     if (!email || !password) {
       return res.status(401).json({
@@ -16,17 +14,13 @@ class TokenController {
       });
     }
 
-
     const user = await _UserModeljs2.default.findOne({ email });
 
     if (!user) {
-
       return res.status(401).json({ errors: ['Usuário não existe'] });
     }
 
-
     if (!(await user.passwordIsValid(password))) {
-
       return res.status(401).json({ errors: ['Senha inválida'] });
     }
 
@@ -34,9 +28,7 @@ class TokenController {
       expiresIn: process.env.TOKEN_EXPIRATION,
     });
 
-
-    return res.json({ token, user: { nome: user.nome, id: user._id, email: user.email } });
-
+    return res.json({ token });
   }
 }
 

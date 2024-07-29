@@ -5,21 +5,25 @@ exports. default = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
-    return res.json({
-      error: ['Login Required'],
+    return res.status(401).json({
+      errors: ['Login Required'],
     });
   }
+
 
   const [, token] = authorization.split(' ');
 
   try {
+    // Verifique e decodifique o token
     const dados = _jsonwebtoken2.default.verify(token, process.env.TOKEN_SECRET);
     const { id, email } = dados;
 
+
     const user = await _UserModeljs2.default.findOne({
-      id,
+      _id: id,
       email,
     });
+
 
     if (!user) {
       return res.status(401).json({
@@ -27,15 +31,17 @@ exports. default = async (req, res, next) => {
       });
     }
 
+
     req.userId = id;
     req.userEmail = email;
+
 
     return next();
 
   } catch (error) {
-    return res.status(401).json({
-      errors: ['Token expirado ou invalido']
-    });
 
+    return res.status(401).json({
+      errors: ['Token expirado ou inválido'],
+    });
   }
-}
+};

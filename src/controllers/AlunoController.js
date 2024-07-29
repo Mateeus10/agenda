@@ -38,12 +38,12 @@ class AlunoController {
 
   async update(req, res) {
     const { id } = req.params; // Supondo que você está passando o ID do usuário como parte da URL
-    const { nome, sobrenome, email, idade } = req.body;
+    const { nome, sobrenome, email } = req.body;
 
     try {
       const updatedAluno = await Aluno.findOneAndUpdate(
         { _id: id }, // Critério de busca: encontrar o usuário pelo ID
-        { nome, sobrenome, email, idade }, // Novos valores a serem atualizados
+        { nome, sobrenome, email }, // Novos valores a serem atualizados
         { new: true } // Opção para retornar o novo documento atualizado
       );
 

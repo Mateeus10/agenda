@@ -1,14 +1,14 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _bcryptjs = require('bcryptjs'); var _bcryptjs2 = _interopRequireDefault(_bcryptjs);
-var _mongoose = require('mongoose'); var _mongoose2 = _interopRequireDefault(_mongoose);
-var _validator = require('validator'); var _validator2 = _interopRequireDefault(_validator);
+import bcryptjs from 'bcryptjs';
+import mongoose from 'mongoose';
+import validator from 'validator';
 
 
-const CounterUsSchema = new _mongoose2.default.Schema({
+const CounterUsSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
 });
 
-const CounterUs = _mongoose2.default.model('CounterUs', CounterUsSchema);
+const CounterUs = mongoose.model('CounterUs', CounterUsSchema);
 
 
 const createUserCounterIfNeeded = async function () {
@@ -22,7 +22,7 @@ const createUserCounterIfNeeded = async function () {
   }
 }
 
-const UserSchema = new _mongoose2.default.Schema({
+const UserSchema = new mongoose.Schema({
   _id: {
     type: Number,
     default: 0
@@ -37,7 +37,7 @@ const UserSchema = new _mongoose2.default.Schema({
     required: true,
     unique: true,
     validate: {
-      validator: _validator2.default.isEmail,
+      validator: validator.isEmail,
       message: props => `${props.value} não é um e-mail válido!`
     }
   },
@@ -52,7 +52,7 @@ const UserSchema = new _mongoose2.default.Schema({
 });
 UserSchema.methods.passwordIsValid = async function (password) {
   try {
-    return await _bcryptjs2.default.compare(password, this.password);
+    return await bcryptjs.compare(password, this.password);
   } catch (error) {
     throw new Error(error);
   }
@@ -61,7 +61,7 @@ UserSchema.methods.passwordIsValid = async function (password) {
 UserSchema.pre('save', async function (next) {
   try {
     if (this.isNew) {
-      const contador = await CounterUs.findOneAndUpdate({ _id: 'UserId' },
+      const contador = await CounterAl.findOneAndUpdate({ _id: 'UserId' },
         { $inc: { seq: 1 } },
         { new: true, upsert: true });
       this._id = contador.seq;
@@ -73,13 +73,13 @@ UserSchema.pre('save', async function (next) {
 });
 
 UserSchema.pre('save', async function () {
-  const salt = await _bcryptjs2.default.genSalt(10);
-  this.password = await _bcryptjs2.default.hash(this.password, salt);
+  const salt = await bcryptjs.genSalt(10);
+  this.password = await bcryptjs.hash(this.password, salt);
 });
 
-const User = _mongoose2.default.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
-exports. default = User;
+export default User;
 
 
 

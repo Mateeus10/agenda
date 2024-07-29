@@ -2,30 +2,29 @@ import bcryptjs from 'bcryptjs';
 import mongoose from 'mongoose';
 import validator from 'validator';
 
-
 const CounterUsSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
 });
 
-const CounterUs = mongoose.model('CounterUs', CounterUsSchema);
+const UserCounter = mongoose.model('UserCounter', CounterUsSchema);
 
-
-const createUserCounterIfNeeded = async function () {
+// Função para criar o contador de alunos apenas se ele ainda não existir
+const createUser = async function () {
   try {
-    const existingCounter = await CounterUs.findOne({ _id: 'UserId' });
+    const existingCounter = await UserCounter.findOne({ _id: 'UserId' });
     if (!existingCounter) {
-      await CounterUs.create({ _id: 'UserId' });
+      await UserCounter.create({ _id: 'UserId' });
     }
   } catch (error) {
-    console.error('Erro ao criar o contador de usuarios:', error);
+    console.error('Erro ao criar o contador de alunos:', error);
   }
 }
 
 const UserSchema = new mongoose.Schema({
   _id: {
     type: Number,
-    default: 0
+    default: 0 // Definimos o valor padrão como 0
   },
   nome: {
     type: String,
@@ -58,12 +57,24 @@ UserSchema.methods.passwordIsValid = async function (password) {
   }
 };
 
+// Middleware para hash da senha antes de salvar
+UserSchema.pre('save', async function (next) {
+  try {
+    if (this.isModified('password')) {
+      const salt = await bcryptjs.genSalt(10);
+      this.password = await bcryptjs.hash(this.password, salt);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 UserSchema.pre('save', async function (next) {
   try {
     if (this.isNew) {
-      const contador = await CounterUs.findOneAndUpdate({ _id: 'UserId' },
-        { $inc: { seq: 1 } },
-        { new: true, upsert: true });
+      const contador = await UserCounter.findOneAndUpdate({ _id: 'UserId' }, { $inc: { seq: 1 } }, { new: true, upsert: true });
       this._id = contador.seq;
     }
     next();
@@ -72,15 +83,10 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
-UserSchema.pre('save', async function () {
-  const salt = await bcryptjs.genSalt(10);
-  this.password = await bcryptjs.hash(this.password, salt);
-});
+
 
 const User = mongoose.model('User', UserSchema);
-
 export default User;
 
-
-
-createUserCounterIfNeeded();
+// Verifica se o contador de alunos existe e, se não existir, cria um novo
+createUser();
