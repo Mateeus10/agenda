@@ -37,14 +37,14 @@ class UserController {
   }
 
   async update(req, res) {
-    const { id } = req.params;
-    const { nome, email } = req.body;
+    const { id } = req.params; // Supondo que você está passando o ID do usuário como parte da URL
+    const { nome, sobrenome, email, idade } = req.body;
 
     try {
       const updatedUser = await User.findOneAndUpdate(
-        { _id: id },
-        { nome, email },
-        { new: true }
+        { _id: id }, // Critério de busca: encontrar o usuário pelo ID
+        { nome, sobrenome, email, idade }, // Novos valores a serem atualizados
+        { new: true } // Opção para retornar o novo documento atualizado
       );
 
       if (!updatedUser) {
@@ -71,19 +71,6 @@ class UserController {
       return res.status(500).json({ message: 'Erro ao excluir usuário.' });
     }
   }
-  async show(req, res) {
-    try {
-      const User = await User.findById(req.params.id);
-
-      const { id, nome, email } = User;
-
-      return res.json({ id, nome, email });
-    } catch (error) {
-      return res.json(null);
-
-    }
-  }
-
 
 }
 

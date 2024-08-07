@@ -2,23 +2,22 @@ import bcryptjs from 'bcryptjs';
 import mongoose from 'mongoose';
 import validator from 'validator';
 
-
-const CounterUsSchema = new mongoose.Schema({
+const CounterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
 });
 
-const CounterUs = mongoose.model('CounterUs', CounterUsSchema);
+const Counter = mongoose.model('Counter', CounterSchema);
 
-
-const createUserCounterIfNeeded = async function () {
+const createCounterIfNeeded = async function () {
   try {
-    const existingCounter = await CounterUs.findOne({ _id: 'UserId' });
+    const existingCounter = await Counter.findOne({ _id: 'userId' });
     if (!existingCounter) {
-      await CounterUs.create({ _id: 'UserId' });
+      await Counter.create({ _id: 'userId' });
+      console.log('Contador criado com sucesso.');
     }
   } catch (error) {
-    console.error('Erro ao criar o contador de usuarios:', error);
+
   }
 }
 
@@ -31,7 +30,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   email: {
     type: String,
     required: true,
@@ -50,37 +48,35 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-UserSchema.methods.passwordIsValid = async function (password) {
-  try {
-    return await bcryptjs.compare(password, this.password);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 
 UserSchema.pre('save', async function (next) {
   try {
     if (this.isNew) {
-      const contador = await CounterUs.findOneAndUpdate({ _id: 'UserId' },
+      // Incrementar o contador de ID
+      const counter = await Counter.findOneAndUpdate(
+        { _id: 'userId' },
         { $inc: { seq: 1 } },
-        { new: true, upsert: true });
-      this._id = contador.seq;
+        { new: true, upsert: true }
+      );
+      this._id = counter.seq;
     }
+
+    // Gerar hash da senha
+    if (this.isModified('password')) {
+      const salt = await bcryptjs.genSalt(10);
+      this.password = await bcryptjs.hash(this.password, salt);
+    }
+
     next();
   } catch (error) {
     next(error);
   }
 });
 
-UserSchema.pre('save', async function () {
-  const salt = await bcryptjs.genSalt(10);
-  this.password = await bcryptjs.hash(this.password, salt);
-});
-
+// Criar o modelo de Usuário
 const User = mongoose.model('User', UserSchema);
 
+// Inicializar o contador quando o módulo é carregado
+createCounterIfNeeded();
+
 export default User;
-
-
-
-createUserCounterIfNeeded();
